@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.cos.securityex01.config.oauth.PrincipalOauth2UserService;
+
 
 @Configuration //IoC 빈(bean)을 등록
 @EnableWebSecurity //필터 체인 관리 시작 어노테이션
@@ -34,7 +36,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
           	  .formLogin()
           	  .loginPage("/login")
           	  .loginProcessingUrl("/loginProc")
-          	  .defaultSuccessUrl("/");
+          	  .defaultSuccessUrl("/")
+    	  .and()
+    	  	  .oauth2Login()
+    	  	  .loginPage("/login")
+    	  	  .userInfoEndpoint() //userService를 만들어 줘야한다. 
+    	      .userService(new PrincipalOauth2UserService());
     	      
     }
 }
