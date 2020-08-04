@@ -9,10 +9,16 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 //ORM - Object Relation Mapping
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Data
 @Entity
 public class User {
@@ -24,6 +30,9 @@ public class User {
     private String password; 
     private String email;
     private String role;// ROLE_USER, ROLE_ADMIN
+    //OAuth 유저를 위한 필드 2개
+    private String provider;
+    private String providerId;
     @CreationTimestamp
     private Timestamp createDate;
 }

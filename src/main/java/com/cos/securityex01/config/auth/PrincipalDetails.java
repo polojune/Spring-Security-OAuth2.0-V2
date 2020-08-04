@@ -12,10 +12,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import com.cos.securityex01.model.User;
 
-import lombok.Data;
-
 //Authentiaction 객체에 저장할 수 있는 유일한 타입
-@Data
+
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
 	private User user;
@@ -23,11 +21,25 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 	private String role;
 	private Map<String, Object> attributes;
    
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setAttributes(Map<String, Object> attributes) {
+		this.attributes = attributes;
+	}
+    //일반 시큐리티 로그인시 사용
 	public PrincipalDetails(User user) {
 		super();
 		this.user = user;
 	}
-
+	 //OAuth2.0 로그인시 사용
+	 public PrincipalDetails(User user, Map<String, Object> attributes) {
+	   this.user = user; 
+	   this.attributes = attributes;
+	}
+    
 	@Override
 	public String getPassword() {
 
@@ -80,10 +92,11 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 		return attributes;
 	}
 
+	//User의 Primarykey  
 	@Override
 	public String getName() {
 	
-		return "제공자 ID";
+		return user.getId()+"";
 	}
 
 }

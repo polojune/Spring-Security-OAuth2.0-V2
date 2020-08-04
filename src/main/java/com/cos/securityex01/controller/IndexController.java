@@ -37,6 +37,7 @@ public class IndexController {
 	public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principal) {
 		System.out.println(principal);
 		System.out.println(principal.getUser().getRole());
+		System.out.println("OAuth2:" + principal.getUser().getProvider());
 		System.out.println(principal.getAuthorities());
 		return "유저 페이지 입니다.";
 	}
