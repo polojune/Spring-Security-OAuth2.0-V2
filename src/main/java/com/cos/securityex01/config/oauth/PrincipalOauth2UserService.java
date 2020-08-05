@@ -1,5 +1,6 @@
 package com.cos.securityex01.config.oauth;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import com.cos.securityex01.config.oauth.provider.NaverUserInfo;
 import com.cos.securityex01.config.auth.PrincipalDetails;
 import com.cos.securityex01.config.oauth.provider.FaceBookUserInfo;
 import com.cos.securityex01.config.oauth.provider.GoogleUserInfo;
@@ -45,6 +47,11 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService{
 		   oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes()); 
 		}else if(userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
 			oAuth2UserInfo = new FaceBookUserInfo(oAuth2User.getAttributes());
+		} else if (userRequest.getClientRegistration().getRegistrationId().equals("naver")){
+			System.out.println("네이버 로그인 요청~~");
+			oAuth2UserInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
+			
+			
 		}else {
 			System.out.println("우리는 구글과 페이스북만 지원해요");
 		}
@@ -54,6 +61,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService{
 		User user; 
 		if(userOptional.isPresent()) {
 			user = userOptional.get();
+			user.setEmail(oAuth2UserInfo.getEmail());
+			userRepository.save(user);
 		  
 		}else {
 		 //user의 패스워드가 null이기 때문에 OAuth 유저는 일반적인 로그인을 할 수 없음. 
